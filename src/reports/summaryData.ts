@@ -2,7 +2,7 @@ import { FILE_FORMAT_LABELS } from '../models/dataset';
 import type { ComparisonOptions } from '../models/comparison';
 import type { ReportContext, ReportFileInfo } from './types';
 
-export const APP_NAME = 'DataStage File Comparator';
+export const APP_NAME = 'File Comparator';
 export const APP_VERSION = '1.0.0';
 
 export function formatBytes(n: number): string {

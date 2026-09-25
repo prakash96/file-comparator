@@ -23,7 +23,7 @@ export function ComparatorPage() {
             <path d="M8 9h7v14H8zM17 9h7v14h-7z" fill="#fff" opacity=".92" />
           </svg>
           <div>
-            <h1>DataStage File Comparator</h1>
+            <h1>File Comparator</h1>
             <div className="privacy" role="note">
               <span aria-hidden>🔒</span> Files are processed locally in your browser and are not uploaded.
             </div>
@@ -81,7 +81,7 @@ export function ComparatorPage() {
           </section>
         )}
       </main>
-      <footer className="app-footer muted">DataStage File Comparator 1.0 · runs offline · no data is stored or sent anywhere</footer>
+      <footer className="app-footer muted">File Comparator 1.0 · runs offline · no data is stored or sent anywhere</footer>
     </div>
   );
 }

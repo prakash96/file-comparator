@@ -1,5 +1,5 @@
 {
-  "name": "datastage-file-comparator",
+  "name": "file-comparator",
   "private": true,
   "version": "1.0.0",
   "description": "Browser-only file comparison tool for DataStage developers. All parsing and comparison happens locally.",

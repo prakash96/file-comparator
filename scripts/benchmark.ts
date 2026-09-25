@@ -65,6 +65,6 @@ async function bench(n: number) {
 }
 
 (async () => {
-  console.log('DataStage File Comparator benchmark (Node', process.version + ')');
+  console.log('File Comparator benchmark (Node', process.version + ')');
   for (const n of SIZES) await bench(n);
 })();
