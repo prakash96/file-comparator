@@ -1,0 +1,236 @@
+{
+  "extract": "CUSTOMER_MASTER",
+  "customers": [
+    {
+      "CUSTOMER_ID": 1,
+      "NAME": "Asha Rao",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 6250,
+      "ADDRESS": {
+        "CITY": "Mumbai"
+      },
+      "OPEN_DATE": "2011-02-02",
+      "EMAIL": "asha@example.com"
+    },
+    {
+      "CUSTOMER_ID": 2,
+      "NAME": "Bharat Iyer",
+      "STATUS": "CLOSED",
+      "CREDIT_LIMIT": 7500,
+      "ADDRESS": {
+        "CITY": "Pune"
+      },
+      "OPEN_DATE": "2012-03-03",
+      "EMAIL": "bharat@example.com"
+    },
+    {
+      "CUSTOMER_ID": 4,
+      "NAME": "Dev Malhotra",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 10000,
+      "ADDRESS": {
+        "CITY": "Chennai"
+      },
+      "OPEN_DATE": "2014-05-05",
+      "EMAIL": ""
+    },
+    {
+      "CUSTOMER_ID": 5,
+      "NAME": "Esha Kapoor",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 12500,
+      "ADDRESS": {
+        "CITY": "Bengaluru"
+      },
+      "OPEN_DATE": "2015-06-06",
+      "EMAIL": "esha@example.com"
+    },
+    {
+      "CUSTOMER_ID": 6,
+      "NAME": "Farhan Ali",
+      "STATUS": "CLOSED",
+      "CREDIT_LIMIT": 12500,
+      "ADDRESS": {
+        "CITY": "Kolkata"
+      },
+      "OPEN_DATE": "2016-07-07",
+      "EMAIL": "farhan@example.com"
+    },
+    {
+      "CUSTOMER_ID": 7,
+      "NAME": "Gita Menon",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 13750,
+      "ADDRESS": {
+        "CITY": "Hyderabad"
+      },
+      "OPEN_DATE": "2017-08-08",
+      "EMAIL": "gita@example.com"
+    },
+    {
+      "CUSTOMER_ID": 8,
+      "NAME": "Hari Singh",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 15000,
+      "ADDRESS": {
+        "CITY": "Mumbai"
+      },
+      "OPEN_DATE": "2018-09-09",
+      "EMAIL": "hari@example.com"
+    },
+    {
+      "CUSTOMER_ID": 9,
+      "NAME": "Indu Das",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 16250,
+      "ADDRESS": {
+        "CITY": "Hyderabad"
+      },
+      "OPEN_DATE": "2019-10-10",
+      "EMAIL": "indu@example.com"
+    },
+    {
+      "CUSTOMER_ID": 10,
+      "NAME": "Jai Verma",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 17500,
+      "ADDRESS": {
+        "CITY": "Delhi"
+      },
+      "OPEN_DATE": "2020-11-11",
+      "EMAIL": "jai@example.com"
+    },
+    {
+      "CUSTOMER_ID": 11,
+      "NAME": "Kavya Shah",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 18750,
+      "ADDRESS": {
+        "CITY": "Chennai"
+      },
+      "OPEN_DATE": "2021-12-12",
+      "EMAIL": "kavya@example.com"
+    },
+    {
+      "CUSTOMER_ID": 11,
+      "NAME": "Kavya Shah",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 99999,
+      "ADDRESS": {
+        "CITY": "Chennai"
+      },
+      "OPEN_DATE": "2021-12-12",
+      "EMAIL": "kavya@example.com"
+    },
+    {
+      "CUSTOMER_ID": 12,
+      "NAME": "LAKSHMI PILLAI",
+      "STATUS": "SUSPENDED",
+      "CREDIT_LIMIT": 20000,
+      "ADDRESS": {
+        "CITY": "Bengaluru"
+      },
+      "OPEN_DATE": "2010-01-13",
+      "EMAIL": "lakshmi@example.com"
+    },
+    {
+      "CUSTOMER_ID": 13,
+      "NAME": "Manoj Gupta",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 21250,
+      "ADDRESS": {
+        "CITY": "Kolkata"
+      },
+      "OPEN_DATE": "2011-02-14",
+      "EMAIL": "manoj@example.com"
+    },
+    {
+      "CUSTOMER_ID": 14,
+      "NAME": "Neha Joshi",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 22500,
+      "ADDRESS": {
+        "CITY": "Hyderabad"
+      },
+      "OPEN_DATE": "2012-03-15",
+      "EMAIL": "neha@example.com"
+    },
+    {
+      "CUSTOMER_ID": 16,
+      "NAME": "Priya Reddy",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 25000,
+      "ADDRESS": {
+        "CITY": "Pune"
+      },
+      "OPEN_DATE": "2014-05-17",
+      "EMAIL": "priya@example.com"
+    },
+    {
+      "CUSTOMER_ID": 17,
+      "NAME": "Qasim Khan",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 26250,
+      "ADDRESS": {
+        "CITY": null
+      },
+      "OPEN_DATE": "2015-06-18",
+      "EMAIL": "qasim@example.com"
+    },
+    {
+      "CUSTOMER_ID": 18,
+      "NAME": "Ravi Kumar",
+      "STATUS": "CLOSED",
+      "CREDIT_LIMIT": 27500,
+      "ADDRESS": {
+        "CITY": "Chennai"
+      },
+      "OPEN_DATE": "2016-07-19",
+      "EMAIL": "ravi@example.com"
+    },
+    {
+      "CUSTOMER_ID": 19,
+      "NAME": "Sara Thomas",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 28750,
+      "ADDRESS": {
+        "CITY": "Bengaluru"
+      },
+      "OPEN_DATE": "2017-08-20",
+      "EMAIL": "sara@example.com"
+    },
+    {
+      "CUSTOMER_ID": 20,
+      "NAME": "Tara Bose",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 30000,
+      "ADDRESS": {
+        "CITY": "Kolkata"
+      },
+      "OPEN_DATE": "2018-09-21",
+      "EMAIL": "tara@example.com"
+    },
+    {
+      "CUSTOMER_ID": 21,
+      "NAME": "Uday Jain",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 1000,
+      "ADDRESS": {
+        "CITY": "Mumbai"
+      },
+      "OPEN_DATE": "2024-06-01",
+      "EMAIL": "uday@example.com"
+    },
+    {
+      "CUSTOMER_ID": 22,
+      "NAME": "Veena Patil",
+      "STATUS": "ACTIVE",
+      "CREDIT_LIMIT": 1000,
+      "ADDRESS": {
+        "CITY": "Mumbai"
+      },
+      "OPEN_DATE": "2024-06-01",
+      "EMAIL": "veena@example.com"
+    }
+  ]
+}

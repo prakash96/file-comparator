@@ -1,0 +1,22 @@
+CUSTOMER_ID,NAME,STATUS,CREDIT_LIMIT,CITY,OPEN_DATE,EMAIL
+1,Asha Rao,ACTIVE,6250.00,Mumbai,2011-02-02,asha@example.com
+2,Bharat Iyer,ACTIVE,7500.00,Pune,2012-03-03,bharat@example.com
+3,Chitra Nair,ACTIVE,8750.00,Delhi,2013-04-04,chitra@example.com
+4,Dev Malhotra,ACTIVE,10000.00,Chennai,2014-05-05,
+5,Esha Kapoor,ACTIVE,11250.00,Bengaluru,2015-06-06,esha@example.com
+6,Farhan Ali,CLOSED,12500.00,Kolkata,2016-07-07,farhan@example.com
+7,Gita Menon,ACTIVE,13750.00,Hyderabad,2017-08-08,gita@example.com
+7,Gita Menon (dup),ACTIVE,13750.00,Hyderabad,2017-08-08,gita@example.com
+8,Hari Singh,ACTIVE,15000.00,Mumbai,2018-09-09,hari@example.com
+9,Indu Das,ACTIVE,16250.00,Pune,2019-10-10,indu@example.com
+10,Jai Verma,ACTIVE,17500.00,Delhi,2020-11-11,jai@example.com
+11,Kavya Shah,ACTIVE,18750.00,Chennai,2021-12-12,kavya@example.com
+12,Lakshmi Pillai,CLOSED,20000.00,Bengaluru,2010-01-13,lakshmi@example.com
+13,Manoj Gupta,ACTIVE,21250.00,Kolkata,2011-02-14,manoj@example.com
+14,Neha Joshi,ACTIVE,22500.00,Hyderabad,2012-03-15,neha@example.com
+15,Om Prakash,ACTIVE,23750.00,Mumbai,2013-04-16,om@example.com
+16,Priya Reddy,ACTIVE,25000.00,Pune,2014-05-17,priya@example.com
+17,Qasim Khan,ACTIVE,26250.00,Delhi,2015-06-18,qasim@example.com
+18,Ravi Kumar,CLOSED,27500.00,Chennai,2016-07-19,ravi@example.com
+19,Sara Thomas,ACTIVE,28750.00,Bengaluru,2017-08-20,sara@example.com
+20,Tara Bose,ACTIVE,30000.00,Kolkata,2018-09-21,tara@example.com

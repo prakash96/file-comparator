@@ -1,0 +1,5 @@
+# Normalize line endings for source files
+* text=auto eol=lf
+
+# Sample data is test input: keep bytes exactly as generated (some use CRLF on purpose)
+samples/** -text

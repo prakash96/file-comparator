@@ -1,0 +1,43 @@
+{
+  "columns": [
+    {
+      "name": "CUSTOMER_ID",
+      "start": 1,
+      "length": 10,
+      "type": "integer"
+    },
+    {
+      "name": "NAME",
+      "start": 11,
+      "length": 30,
+      "type": "string"
+    },
+    {
+      "name": "STATUS",
+      "start": 41,
+      "length": 10,
+      "type": "string"
+    },
+    {
+      "name": "CREDIT_LIMIT",
+      "start": 51,
+      "length": 12,
+      "type": "decimal"
+    },
+    {
+      "name": "CITY",
+      "start": 63,
+      "length": 20,
+      "type": "string"
+    },
+    {
+      "name": "OPEN_DATE",
+      "start": 83,
+      "length": 10,
+      "type": "date"
+    }
+  ],
+  "trim": true,
+  "skipLines": 0,
+  "recordLength": 0
+}

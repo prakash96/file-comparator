@@ -1,0 +1,36 @@
+{
+  "name": "datastage-file-comparator",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Browser-only file comparison tool for DataStage developers. All parsing and comparison happens locally.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b",
+    "bench": "tsx scripts/benchmark.ts",
+    "samples": "tsx scripts/generate-samples.ts",
+    "gen-data": "tsx scripts/generate-dataset.ts"
+  },
+  "dependencies": {
+    "hyparquet": "^1.31.1",
+    "hyparquet-compressors": "^1.1.2",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "hyparquet-writer": "^0.16.10",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.1",
+    "vitest": "^5.0.1"
+  }
+}

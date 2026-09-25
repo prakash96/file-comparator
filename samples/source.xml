@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customers>
+  <customer id="1">
+    <NAME>Asha Rao</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>6250.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Mumbai</CITY></ADDRESS>
+    <OPEN_DATE>2011-02-02</OPEN_DATE>
+    <EMAIL>asha@example.com</EMAIL>
+  </customer>
+  <customer id="2">
+    <NAME>Bharat Iyer</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>7500.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Pune</CITY></ADDRESS>
+    <OPEN_DATE>2012-03-03</OPEN_DATE>
+    <EMAIL>bharat@example.com</EMAIL>
+  </customer>
+  <customer id="3">
+    <NAME>Chitra Nair</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>8750.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Delhi</CITY></ADDRESS>
+    <OPEN_DATE>2013-04-04</OPEN_DATE>
+    <EMAIL>chitra@example.com</EMAIL>
+  </customer>
+  <customer id="4">
+    <NAME>Dev Malhotra</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>10000.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Chennai</CITY></ADDRESS>
+    <OPEN_DATE>2014-05-05</OPEN_DATE>
+    <EMAIL/>
+  </customer>
+  <customer id="5">
+    <NAME>Esha Kapoor</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>11250.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Bengaluru</CITY></ADDRESS>
+    <OPEN_DATE>2015-06-06</OPEN_DATE>
+    <EMAIL>esha@example.com</EMAIL>
+  </customer>
+  <customer id="6">
+    <NAME>Farhan Ali</NAME>
+    <STATUS>CLOSED</STATUS>
+    <CREDIT_LIMIT>12500.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Kolkata</CITY></ADDRESS>
+    <OPEN_DATE>2016-07-07</OPEN_DATE>
+    <EMAIL>farhan@example.com</EMAIL>
+  </customer>
+  <customer id="7">
+    <NAME>Gita Menon</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>13750.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Hyderabad</CITY></ADDRESS>
+    <OPEN_DATE>2017-08-08</OPEN_DATE>
+    <EMAIL>gita@example.com</EMAIL>
+  </customer>
+  <customer id="7">
+    <NAME>Gita Menon (dup)</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>13750.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Hyderabad</CITY></ADDRESS>
+    <OPEN_DATE>2017-08-08</OPEN_DATE>
+    <EMAIL>gita@example.com</EMAIL>
+  </customer>
+  <customer id="8">
+    <NAME>Hari Singh</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>15000.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Mumbai</CITY></ADDRESS>
+    <OPEN_DATE>2018-09-09</OPEN_DATE>
+    <EMAIL>hari@example.com</EMAIL>
+  </customer>
+  <customer id="9">
+    <NAME>Indu Das</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>16250.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Pune</CITY></ADDRESS>
+    <OPEN_DATE>2019-10-10</OPEN_DATE>
+    <EMAIL>indu@example.com</EMAIL>
+  </customer>
+  <customer id="10">
+    <NAME>Jai Verma</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>17500.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Delhi</CITY></ADDRESS>
+    <OPEN_DATE>2020-11-11</OPEN_DATE>
+    <EMAIL>jai@example.com</EMAIL>
+  </customer>
+  <customer id="11">
+    <NAME>Kavya Shah</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>18750.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Chennai</CITY></ADDRESS>
+    <OPEN_DATE>2021-12-12</OPEN_DATE>
+    <EMAIL>kavya@example.com</EMAIL>
+  </customer>
+  <customer id="12">
+    <NAME>Lakshmi Pillai</NAME>
+    <STATUS>CLOSED</STATUS>
+    <CREDIT_LIMIT>20000.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Bengaluru</CITY></ADDRESS>
+    <OPEN_DATE>2010-01-13</OPEN_DATE>
+    <EMAIL>lakshmi@example.com</EMAIL>
+  </customer>
+  <customer id="13">
+    <NAME>Manoj Gupta</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>21250.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Kolkata</CITY></ADDRESS>
+    <OPEN_DATE>2011-02-14</OPEN_DATE>
+    <EMAIL>manoj@example.com</EMAIL>
+  </customer>
+  <customer id="14">
+    <NAME>Neha Joshi</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>22500.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Hyderabad</CITY></ADDRESS>
+    <OPEN_DATE>2012-03-15</OPEN_DATE>
+    <EMAIL>neha@example.com</EMAIL>
+  </customer>
+  <customer id="15">
+    <NAME>Om Prakash</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>23750.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Mumbai</CITY></ADDRESS>
+    <OPEN_DATE>2013-04-16</OPEN_DATE>
+    <EMAIL>om@example.com</EMAIL>
+  </customer>
+  <customer id="16">
+    <NAME>Priya Reddy</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>25000.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Pune</CITY></ADDRESS>
+    <OPEN_DATE>2014-05-17</OPEN_DATE>
+    <EMAIL>priya@example.com</EMAIL>
+  </customer>
+  <customer id="17">
+    <NAME>Qasim Khan</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>26250.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Delhi</CITY></ADDRESS>
+    <OPEN_DATE>2015-06-18</OPEN_DATE>
+    <EMAIL>qasim@example.com</EMAIL>
+  </customer>
+  <customer id="18">
+    <NAME>Ravi Kumar</NAME>
+    <STATUS>CLOSED</STATUS>
+    <CREDIT_LIMIT>27500.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Chennai</CITY></ADDRESS>
+    <OPEN_DATE>2016-07-19</OPEN_DATE>
+    <EMAIL>ravi@example.com</EMAIL>
+  </customer>
+  <customer id="19">
+    <NAME>Sara Thomas</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>28750.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Bengaluru</CITY></ADDRESS>
+    <OPEN_DATE>2017-08-20</OPEN_DATE>
+    <EMAIL>sara@example.com</EMAIL>
+  </customer>
+  <customer id="20">
+    <NAME>Tara Bose</NAME>
+    <STATUS>ACTIVE</STATUS>
+    <CREDIT_LIMIT>30000.00</CREDIT_LIMIT>
+    <ADDRESS><CITY>Kolkata</CITY></ADDRESS>
+    <OPEN_DATE>2018-09-21</OPEN_DATE>
+    <EMAIL>tara@example.com</EMAIL>
+  </customer>
+</customers>
