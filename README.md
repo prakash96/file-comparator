@@ -1,4 +1,4 @@
-# DataStage File Comparator
+# File Comparator
 
 A browser-only tool for comparing two data files: a DataStage extract before and after a change, a legacy job's output against its migrated replacement, or one environment against another. It shows what was **added, removed, modified, unchanged or duplicated**, down to the exact field values.
 
