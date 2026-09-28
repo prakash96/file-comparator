@@ -130,10 +130,10 @@ export function FormatOptions({ options, summary, busy, onApply }: Props) {
             Column names
             <input
               value={draft.mnt.columnNames.join(', ')}
-              placeholder="optional, e.g. ACTION, MESSAGE_TYPE, ITEM, PRICE_TYPE…"
+              placeholder="optional, e.g. ACTION, MESSAGE_TYPE, ITEM, PRICE_TYPEâ€¦"
               onChange={(e) => set({ mnt: { ...draft.mnt, columnNames: e.target.value.split(',').map((n) => n.trimStart()) } })}
             />
-            <span className="hint">Comma-separated, in field order. Unnamed fields are COL_1, COL_2…</span>
+            <span className="hint">Comma-separated, in field order. Unnamed fields are COL_1, COL_2â€¦</span>
           </label>
         </div>
       )}
