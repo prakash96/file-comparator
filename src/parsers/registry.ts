@@ -4,6 +4,7 @@ import { delimitedParser } from './csv/delimitedParser';
 import { excelParser } from './excel/excelParser';
 import { fixedWidthParser } from './fixedwidth/fixedWidthParser';
 import { jsonParser } from './json/jsonParser';
+import { mntParser } from './mnt/mntParser';
 import { parquetParser } from './parquet/parquetParser';
 import type { FileParser } from './types';
 import { xmlParser } from './xml/xmlParser';
@@ -16,6 +17,7 @@ import { xmlParser } from './xml/xmlParser';
 export const PARSERS: Record<FileFormat, FileParser> = {
   delimited: delimitedParser,
   fixedwidth: fixedWidthParser,
+  mnt: mntParser,
   json: jsonParser,
   xml: xmlParser,
   excel: excelParser,

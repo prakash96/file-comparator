@@ -5,7 +5,7 @@ A browser-only tool for comparing two data files: a DataStage extract before and
 > **Files are processed locally in your browser and are not uploaded.**
 > There is no backend. The production build also carries a Content-Security-Policy with `connect-src 'none'`, so the browser itself refuses any network connection from the app.
 
-Supported formats: **CSV / delimited, fixed-width, JSON (and JSON Lines), XML, Excel (.xlsx / .xls), Avro and Parquet.** Source and target can be different formats, for example CSV against Parquet.
+Supported formats: **CSV / delimited, fixed-width, MNT, JSON (and JSON Lines), XML, Excel (.xlsx / .xls), Avro and Parquet.** Source and target can be different formats, for example CSV against Parquet.
 
 ---
 
@@ -45,7 +45,7 @@ GitHub Pages sites are publicly reachable (except on GitHub Enterprise Cloud wit
 ## Using it
 
 1. **Drop the SOURCE and TARGET files.** The format is detected from the file contents (magic bytes first, then content, with the file extension only as a tie-breaker). Each panel shows the file name, size, detected format, record count, columns, parse status and any warnings.
-2. **Adjust parsing if needed** under *Format & parsing options*: delimiter (comma, pipe, tab, semicolon or custom, including multi-character delimiters like `||`), header yes/no, quote and escape character, text encoding; the fixed-width layout; the JSON root path; the XML record element; the Excel worksheet and header row; flattened or nested handling of nested fields. Click **Apply & re-read file**.
+2. **Adjust parsing if needed** under *Format & parsing options*: delimiter (comma, pipe, tab, semicolon or custom, including multi-character delimiters like `||`), header yes/no, quote and escape character, text encoding; the fixed-width layout; the MNT record delimiter and optional column names; the JSON root path; the XML record element; the Excel worksheet and header row; flattened or nested handling of nested fields. Click **Apply & re-read file**.
 3. **Review the schema comparison**: common columns, columns in only one file, data-type differences, nested-vs-flattened differences, and column order.
 4. **Choose key column(s)** (composite keys are supported, in order) and the comparison rules:
    - case sensitivity
@@ -193,6 +193,17 @@ Other behaviour to know:
 - XML attributes become `@name` fields. Repeated child elements become an array.
 
 ---
+
+### MNT files
+
+An `.mnt` file has one XML-style header element on the first line, followed by headerless delimited records:
+
+```
+<Header line_count="732" download_id="Price_Update_2_839_20260623200819.mnt" target_org_node="STORE:839" .../>
+INSERT|PRICE_UPDATE_2|347014989|REGULAR_PRICE|STORE|839|109.01|2026-06-27 00:00:00||1|15692773|RPM||REGULAR
+```
+
+The header attributes appear in the file details, and `line_count` is checked against the number of records. The records are compared like any headerless delimited file: pipe by default, no quote handling, and columns named `COL_1…COL_n` unless you enter column names under *Format & parsing options*.
 
 ## Extending
 

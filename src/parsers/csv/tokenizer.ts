@@ -17,6 +17,8 @@ export interface TokenizerOptions {
   delimiter: string;
   quoteChar: string;
   escapeChar: string;
+  /** Line number of the first line fed in (when the caller skipped leading lines). Default 1. */
+  startLine?: number;
 }
 
 export interface TokenizerEvents {
@@ -41,6 +43,7 @@ export class DelimitedTokenizer {
     this.delim = opts.delimiter;
     this.quote = opts.quoteChar;
     this.escape = opts.escapeChar || opts.quoteChar;
+    this.line = opts.startLine ?? 1;
   }
 
   feed(chunk: string, isLast = false): void {

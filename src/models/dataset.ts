@@ -12,11 +12,12 @@
  * multi-million-row DataStage extracts.
  */
 
-export type FileFormat = 'delimited' | 'fixedwidth' | 'json' | 'xml' | 'excel' | 'avro' | 'parquet';
+export type FileFormat = 'delimited' | 'fixedwidth' | 'mnt' | 'json' | 'xml' | 'excel' | 'avro' | 'parquet';
 
 export const FILE_FORMAT_LABELS: Record<FileFormat, string> = {
   delimited: 'CSV / Delimited',
   fixedwidth: 'Fixed-width',
+  mnt: 'MNT (header + delimited)',
   json: 'JSON',
   xml: 'XML',
   excel: 'Excel',

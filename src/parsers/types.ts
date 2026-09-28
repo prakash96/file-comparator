@@ -26,7 +26,7 @@ export interface MetaDetail {
 export interface FormatMeta {
   details: MetaDetail[];
   /** Options the parser settled on (detected delimiter, record node, sheet...). The UI adopts these. */
-  resolved?: Partial<Pick<ParseOptions, 'delimited' | 'json' | 'xml' | 'excel' | 'fixedWidth'>>;
+  resolved?: Partial<Pick<ParseOptions, 'delimited' | 'mnt' | 'json' | 'xml' | 'excel' | 'fixedWidth'>>;
   sheets?: { name: string; rows: number }[];
   xmlRecordCandidates?: { name: string; count: number }[];
   jsonRootCandidates?: { path: string; count: number }[];

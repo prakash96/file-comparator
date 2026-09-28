@@ -7,7 +7,7 @@ export type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartia
 export function parseOptions(patch: DeepPartial<ParseOptions> = {}): ParseOptions {
   const base = defaultParseOptions();
   const out = { ...base, ...patch } as ParseOptions;
-  for (const k of ['delimited', 'fixedWidth', 'json', 'xml', 'excel'] as const) {
+  for (const k of ['delimited', 'fixedWidth', 'mnt', 'json', 'xml', 'excel'] as const) {
     (out as unknown as Record<string, unknown>)[k] = { ...base[k], ...(patch[k] as object | undefined) };
   }
   return out;

@@ -1,6 +1,7 @@
 import type { FileFormat } from '../models/dataset';
 import { headLines, readTextHead } from './common/textStream';
 import { sniffDelimited } from './csv/sniff';
+import { looksLikeMnt } from './mnt/mntParser';
 
 export interface Detection {
   format: FileFormat;
@@ -35,8 +36,11 @@ export async function detectFormat(file: Blob, fileName: string, encoding = 'utf
   const text = await readTextHead(file, encoding, 128 * 1024);
   const trimmed = text.replace(/^﻿/, '').trimStart();
   if (!trimmed) {
-    return { format: e === 'json' ? 'json' : e === 'xml' ? 'xml' : 'delimited', confidence: 'low', reason: 'Empty file' };
+    return { format: e === 'json' ? 'json' : e === 'xml' ? 'xml' : e === 'mnt' ? 'mnt' : 'delimited', confidence: 'low', reason: 'Empty file' };
   }
+  // MNT: a one-line <Header .../> element followed by delimited records. Must be checked before XML.
+  if (looksLikeMnt(trimmed)) return { format: 'mnt', confidence: 'high', reason: 'MNT header line followed by delimited records' };
+  if (e === 'mnt') return { format: 'mnt', confidence: 'medium', reason: '.mnt file extension' };
   if (trimmed[0] === '{' || trimmed[0] === '[') return { format: 'json', confidence: 'high', reason: 'Starts with { or [' };
   if (trimmed[0] === '<') return { format: 'xml', confidence: 'high', reason: 'Starts with <' };
 

@@ -36,6 +36,17 @@ export interface FixedWidthOptions {
   recordLength: number;
 }
 
+/**
+ * MNT download files: one `<Header attr="..."/>` line, then headerless delimited
+ * records (e.g. `INSERT|PRICE_UPDATE_2|347014989|REGULAR_PRICE|...`).
+ */
+export interface MntOptions {
+  /** Field delimiter of the record lines. Empty = detect. */
+  delimiter: string;
+  /** Names for the record fields, in order. Missing names default to COL_n. */
+  columnNames: string[];
+}
+
 export interface JsonOptions {
   /** Dotted path to the array of records, e.g. `customers` or `data.items`. Empty = auto-detect. */
   rootPath: string;
@@ -63,6 +74,7 @@ export interface ParseOptions {
   nestedMode: NestedMode;
   delimited: DelimitedOptions;
   fixedWidth: FixedWidthOptions;
+  mnt: MntOptions;
   json: JsonOptions;
   xml: XmlOptions;
   excel: ExcelOptions;
@@ -75,6 +87,7 @@ export function defaultParseOptions(): ParseOptions {
     nestedMode: 'flatten',
     delimited: { delimiter: '', hasHeader: true, quoteChar: '"', escapeChar: '"', skipEmptyLines: true },
     fixedWidth: { columns: [], trim: true, skipLines: 0, recordLength: 0 },
+    mnt: { delimiter: '|', columnNames: [] },
     json: { rootPath: '' },
     xml: { recordNode: '', includeAttributes: true },
     excel: { sheet: '', hasHeader: true, headerRow: 1 },

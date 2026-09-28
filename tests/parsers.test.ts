@@ -6,6 +6,7 @@ import { DelimitedTokenizer } from '../src/parsers/csv/tokenizer';
 import { sniffDelimited } from '../src/parsers/csv/sniff';
 import { fixedWidthParser, suggestLayout, validateLayout } from '../src/parsers/fixedwidth/fixedWidthParser';
 import { jsonParser } from '../src/parsers/json/jsonParser';
+import { mntParser } from '../src/parsers/mnt/mntParser';
 import { xmlParser } from '../src/parsers/xml/xmlParser';
 import { excelParser } from '../src/parsers/excel/excelParser';
 import { avroParser } from '../src/parsers/avro/avroParser';
@@ -113,6 +114,49 @@ describe('20. fixed-width', () => {
   it('validates overlapping and suggests layouts', () => {
     expect(validateLayout([{ name: 'A', start: 1, length: 5, type: 'string' }, { name: 'B', start: 3, length: 2, type: 'string' }])[0]).toMatch(/overlaps/);
     expect(suggestLayout(['AB   CD  ', 'XY   ZW  ']).map((c) => [c.start, c.length])).toEqual([[1, 5], [6, 4]]);
+  });
+});
+
+describe('MNT', () => {
+  const header = '<Header line_count="4" download_id="Price_Update_2_839.mnt" target_org_node="STORE:839" apply_immediately="true"/>';
+  const rows = [
+    'INSERT|PRICE_UPDATE_2|347014989|REGULAR_PRICE|STORE|839|109.01|2026-06-27 00:00:00||1',
+    'INSERT|PRICE_UPDATE_2|423157245|PROMO_PRICE|STORE|839|99.50|2026-06-27 00:00:00||1',
+    'INSERT|PRICE_UPDATE_2|"quoted"|PROMO_PRICE|STORE|839|1.00|2026-06-27 00:00:00||1',
+  ];
+  const mnt = [header, ...rows].join('\r\n') + '\r\n';
+
+  it('reads the header attributes and the headerless pipe records', async () => {
+    const { names, rows: recs, issues, meta } = await parse(mntParser, mnt);
+    expect(names).toEqual(Array.from({ length: 10 }, (_, i) => `COL_${i + 1}`));
+    expect(recs).toHaveLength(3);
+    expect(recs[0].slice(0, 4)).toEqual(['INSERT', 'PRICE_UPDATE_2', '347014989', 'REGULAR_PRICE']);
+    expect(recs[2][2]).toBe('"quoted"'); // no quote processing
+    expect(recs[0][8]).toBe('');
+    expect(meta.details).toContainEqual({ label: 'target_org_node', value: 'STORE:839' });
+    expect(issues).toEqual([]);
+  });
+
+  it('applies column names and warns about a line_count mismatch with the right line numbers', async () => {
+    const text = [header.replace('"4"', '"10"'), rows[0], 'INSERT|X'].join('\n');
+    const { names, issues } = await parse(mntParser, text, { mnt: { columnNames: ['ACTION', 'MSG', 'ITEM'] } });
+    expect(names.slice(0, 4)).toEqual(['ACTION', 'MSG', 'ITEM', 'COL_4']);
+    expect(issues.find((i) => i.code === 'MNT_LINE_COUNT')).toBeTruthy();
+    expect(issues.find((i) => i.code === 'FIELD_COUNT')?.line).toBe(3);
+  });
+
+  it('handles UTF-16 and files without a header line', async () => {
+    const utf16 = new Uint8Array([...mnt].flatMap((c) => [c.charCodeAt(0), 0]));
+    expect((await parse(mntParser, utf16, { encoding: 'utf-16le' })).rows).toHaveLength(3);
+    const noHeader = await parse(mntParser, rows.join('\n'));
+    expect(noHeader.rows).toHaveLength(3);
+    expect(noHeader.issues.map((i) => i.code)).toContain('MNT_NO_HEADER');
+  });
+
+  it('is detected ahead of XML', async () => {
+    expect((await detectFormat(new Blob([mnt]), 'x.txt')).format).toBe('mnt');
+    expect((await detectFormat(new Blob(['<a><b/></a>']), 'x.mnt')).format).toBe('mnt');
+    expect((await detectFormat(new Blob(['<a x="1"/>\n<b/>\n']), 'x.xml')).format).toBe('xml');
   });
 });
 

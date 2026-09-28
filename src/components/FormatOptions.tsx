@@ -11,7 +11,7 @@ const DELIMS: { value: string; label: string }[] = [
   { value: ';', label: 'Semicolon ;' },
 ];
 
-const TEXT_FORMATS: FileFormat[] = ['delimited', 'fixedwidth', 'json', 'xml'];
+const TEXT_FORMATS: FileFormat[] = ['delimited', 'fixedwidth', 'mnt', 'json', 'xml'];
 const NESTED_FORMATS: FileFormat[] = ['json', 'xml', 'avro', 'parquet'];
 
 interface Props {
@@ -116,6 +116,24 @@ export function FormatOptions({ options, summary, busy, onApply }: Props) {
           </label>
           <label className="check">
             <input type="checkbox" checked={draft.delimited.skipEmptyLines} onChange={(e) => setDelim({ skipEmptyLines: e.target.checked })} /> Skip empty lines
+          </label>
+        </div>
+      )}
+
+      {format === 'mnt' && (
+        <div className="form-grid">
+          <label>
+            Record delimiter
+            <input value={showDelim(draft.mnt.delimiter)} placeholder="| (empty = detect)" onChange={(e) => set({ mnt: { ...draft.mnt, delimiter: readDelim(e.target.value) } })} />
+          </label>
+          <label className="wide">
+            Column names
+            <input
+              value={draft.mnt.columnNames.join(', ')}
+              placeholder="optional, e.g. ACTION, MESSAGE_TYPE, ITEM, PRICE_TYPE…"
+              onChange={(e) => set({ mnt: { ...draft.mnt, columnNames: e.target.value.split(',').map((n) => n.trimStart()) } })}
+            />
+            <span className="hint">Comma-separated, in field order. Unnamed fields are COL_1, COL_2…</span>
           </label>
         </div>
       )}

@@ -82,6 +82,7 @@ export class ComparatorSession {
 
     const r = parsed.meta.resolved;
     if (r?.delimited) resolved.delimited = { ...resolved.delimited, ...r.delimited };
+    if (r?.mnt) resolved.mnt = { ...resolved.mnt, ...r.mnt };
     if (r?.json) resolved.json = { ...resolved.json, ...r.json };
     if (r?.xml) resolved.xml = { ...resolved.xml, ...r.xml };
     if (r?.excel) resolved.excel = { ...resolved.excel, ...r.excel };
