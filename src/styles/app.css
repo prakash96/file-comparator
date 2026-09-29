@@ -107,6 +107,10 @@ input[type='checkbox'], input[type='radio'] { accent-color: var(--accent); width
 .brand { display: flex; gap: 12px; align-items: center; }
 .privacy { font-size: 12.5px; color: var(--c-added); font-weight: 500; }
 .header-actions { display: flex; gap: 8px; }
+.page-nav { display: flex; gap: 4px; margin-right: auto; }
+.page-nav a { padding: 6px 12px; border-radius: 6px; color: var(--muted); text-decoration: none; font-weight: 500; }
+.page-nav a:hover { color: var(--text); background: var(--panel-2); }
+.page-nav a.is-active { color: var(--accent); background: var(--accent-soft); }
 main { display: flex; flex-direction: column; gap: 16px; }
 .files { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr)); gap: 16px; }
 .app-footer { text-align: center; font-size: 12px; margin-top: 32px; }
@@ -334,3 +338,14 @@ table.data td.num, table.data th.num { text-align: right; }
   .card-value { font-size: 20px; }
   .bar-row { grid-template-columns: 90px 1fr 70px; }
 }
+
+/* ---------- FFD tools */
+.text-source { display: flex; flex-direction: column; gap: 6px; }
+.text-source-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: 12.5px; }
+.text-source-head label { font-weight: 600; }
+.text-source-actions { display: flex; gap: 6px; margin-left: auto; }
+textarea.code-input { white-space: pre; overflow-wrap: normal; overflow-x: auto; resize: vertical; line-height: 1.45; }
+.ffd-report p { margin: 8px 0; }
+.ffd-output.is-stale { opacity: 0.6; }
+.json-output { background: var(--code); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; max-height: 65vh; overflow: auto; margin: 0; white-space: pre; }
+.ffd-tab { padding-top: 12px; }

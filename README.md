@@ -205,6 +205,25 @@ INSERT|PRICE_UPDATE_2|347014989|REGULAR_PRICE|STORE|839|109.01|2026-06-27 00:00:
 
 The header attributes appear in the file details, and `line_count` is checked against the number of records. The records are compared like any headerless delimited file: pipe by default, no quote handling, and columns named `COL_1…COL_n` unless you enter column names under *Format & parsing options*.
 
+## FFD tools
+
+The **FFD tools** page (`#/ffd`) works with Flat File Definitions: the MuleSoft / DataWeave flat file schema in YAML (see `samples/ffdschema.ffd`). It supports `form: FLATFILE` (several record types told apart by a `tagValue`, grouped by `structures`) and `form: FIXEDWIDTH` (one record type).
+
+- **Generate FFD from text.** Paste or open sample fixed-width text. The generator:
+  - finds the record-type tag, either a length prefix such as ` 0630` (the record length after the prefix) or a short code such as `HDR` / `DTL`, or you set its position and length yourself;
+  - splits each record type into fields at blank columns;
+  - builds a structure from the order records appear in, so record types that repeat become a `count: '>1'` group.
+
+  Fields are named `Field1…`, so rename them in the editable result, then copy or download the `.ffd`.
+- **Apply FFD → JSON.** Paste or open an FFD and sample text. You can choose:
+  - how records are separated (one per line, or back to back with no line breaks);
+  - which structure to group by, or a plain list of records;
+  - whether padding is trimmed.
+
+  The JSON updates as you edit. Records that don't fit the structure are listed under `_unmatched`, with a warning. Integer and Decimal fields (including `format: { implicit: n }`) become JSON numbers when they fit without losing precision.
+
+The code is in `src/ffd/` (`ffdYaml.ts` reads and writes schemas, `applyFfd.ts`, `inferFfd.ts`) and has no UI dependencies. The page is `src/pages/FfdPage.tsx`.
+
 ## Extending
 
 ### Add a file format
@@ -257,6 +276,7 @@ Nothing in `comparison/`, `reports/` or the result views needs to change.
 | `tests/normalization.test.ts` | trim, case, NULL/empty, canonical numbers (including 30-digit decimals and trailing signs), date patterns, ISO with zone offsets, tolerance |
 | `tests/parsers.test.ts` | CSV (quotes, escapes, multi-character delimiters, every chunk size, encodings, field-count warnings), fixed-width, JSON / JSON Lines / root paths / malformed JSON, XML (attributes, CDATA, entities, malformed), Excel (sheets, dates, float noise), Avro (null + deflate codecs, logical types, truncation), Parquet, format detection |
 | `tests/session.test.ts` | the worker host end to end: detection, compare, paging, search, sort, changed-column filter, every report format, cancellation, reset, masked AI input |
+| `tests/ffd.test.ts` | FFD schema parsing (the sample FFD, validation messages, round trip), applying it (lines and back-to-back records, structures, unmatched records, numeric types) and generating FFDs from text (length-prefix and code tags, groups, single record type) |
 | `tests/samples.test.ts` | every sample pair in every format gives the documented counts, plus cross-format pairs (CSV vs Parquet, CSV vs JSON) |
 
 The UI was also driven in Microsoft Edge (headless, with the production CSP) for the CSV, XML, Avro and Parquet sample pairs, the 1M-row pair, and every export. There were no console errors and no requests beyond the app's own assets.
