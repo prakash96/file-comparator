@@ -1,0 +1,114 @@
+form: FLATFILE
+structures:
+- id: 'BatchReq'
+  name: Batch Request
+  data:
+  - groupId: 'Batch'
+    usage: O
+    count: '>1'
+    items:
+    - { idRef: '0630', usage: O }
+  - { idRef: '0461', usage: O }
+  - { idRef: '0246', usage: O }
+  - { idRef: '0941', usage: O }
+  - { idRef: '0179', usage: O }
+  - { idRef: '0165', usage: O }
+  - { idRef: '0174', usage: O }
+segments:
+- id: '0630'
+  name: "Transaction Detail Record"
+  values:
+  - { name: 'MSGLength', type: String, length: 5, tagValue: ' 0630' }
+  - { name: 'RespData1', type: String, length: 37 }
+  - { name: 'BranchCode', type: String, length: 5 }
+  - { name: 'RespData2', type: String, length: 3 }
+  - { name: 'TellerID', type: String, length: 7 }
+  - { name: 'TranCode', type: String, length: 6 }
+  - { name: 'RespData3', type: String, length: 62 }
+  - { name: 'FEJNO', type: String, length: 8 }
+  - { name: 'RespCode', type: String, length: 2 }
+  - { name: 'Date', type: String, length: 8 }
+  - { name: 'Meta2_630', type: String, length: 13 }
+  - { name: 'Amount_DR', type: String, length: 18 }
+  - { name: 'Amount_CR', type: String, length: 18 }
+  - { name: 'Meta3_630', type: String, length: 36 }
+  - { name: 'Balance', type: String, length: 18 }
+  - { name: 'Meta4_630', type: String, length: 27 }
+  - { name: 'Line', type: String, length: 2 }
+  - { name: 'Meta5_630', type: String, length: 23 }
+  - { name: 'Naration', type: String, length: 40 }
+  - { name: 'Meta6_630', type: String, length: 18 }
+  - { name: 'Cheque_No', type: String, length: 9 }
+  - { name: 'Meta7_630', type: String, length: 21 }
+  - { name: 'Meta8_630', type: String, length: 249 }
+- id: '0461'
+  name: "Request File Footer Record"
+  values:  
+  - { name: 'MSGLength', type: String, length: 5,tagValue: ' 0461' }
+  - { name: 'RespData1', type: String, length: 37 }
+  - { name: 'BranchCode', type: String, length: 5 }
+  - { name: 'RespData2', type: String, length: 3 }
+  - { name: 'TellerID', type: String, length: 7 }
+  - { name: 'TranCode', type: String, length: 6 }
+  - { name: 'RespData3', type: String, length: 62 }
+  - { name: 'FEJNO', type: String, length: 8 }
+  - { name: 'RespCode', type: String, length: 2 }
+  - { name: 'Meta1_461', type: String, length: 46 }
+  - { name: 'MoreData', type: String, length: 1 }
+  - { name: 'Meta2_461', type: String, length: 284 }
+- id: '0246'
+  name: "Request File Footer Record"
+  values:
+  - { name: 'MSGLength', type: String, length: 5,tagValue: ' 0246' }
+  - { name: 'RespData1', type: String, length: 37 }
+  - { name: 'BranchCode', type: String, length: 5 }
+  - { name: 'RespData2', type: String, length: 3 }
+  - { name: 'TellerID', type: String, length: 7 }
+  - { name: 'TranCode', type: String, length: 6 }
+  - { name: 'RespData3', type: String, length: 62 }
+  - { name: 'FEJNO', type: String, length: 8 }
+  - { name: 'RespCode', type: String, length: 2 }
+  - { name: 'Resp_246', type: String, length: 4 }
+  - { name: 'Meta_246', type: String, length: 112 }
+- id: '0941'
+  name: "Transactionrecords"
+  values:
+  - { name: 'msgLength', type: String, length: 5, tagValue: ' 0941' }
+  - { name: 'header', type: String, length: 130 }
+  - { name: 'ERROR_RESPONSE_META1', type: String, length: 4 }
+  - { name: 'RESPONSE_CODE', type: String, length: 4 }
+  - { name: 'ERROR_RESPONSE_META2', type: String, length: 4 }
+  - { name: 'RESPONSE_DESCRIPTION', type: String, length: 100 }
+  - { name: 'ERROR_RESPONSE_META3', type: String, length: 699 }
+
+  
+- id: '0179'
+  name: "Request File Footer Record"
+  values:  
+  - { name: 'msgLength', type: String, length: 5,tagValue: ' 0179' }
+  - { name: 'header', type: String, length: 130 }
+  - { name: 'errorResponseMetaData4', type: String, length: 4 }
+  - { name: 'responseCode', type: String, length: 4 }
+  - { name: 'errorResponseMetaData5', type: String, length: 4 }
+  - { name: 'responseDescription', type: String, length: 37 }
+  
+- id: '0165'
+  name: "Error Message"
+  values:
+  - { name: 'msgLength', type: String, length: 5,tagValue: ' 0165' }
+  - { name: 'header', type: String, length: 130 }
+  - { name: 'errorResponseMetaData6', type: String, length: 4 }
+  - { name: 'responseCode', type: String, length: 4 }
+  - { name: 'errorResponseMetaData7', type: String, length: 4 }
+  - { name: 'responseDescription', type: String, length: 23 }
+
+  
+- id: '0174'
+  name: "Request File Footer Record"
+  values:
+  - { name: 'msgLength', type: String, length: 5,tagValue: ' 0174' }
+  - { name: 'header', type: String, length: 130 }
+  - { name: 'errorResponseMetaData8', type: String, length: 4 }
+  - { name: 'responseCode', type: String, length: 4 }
+  - { name: 'errorResponseMetaData9', type: String, length: 4 }
+  - { name: 'responseDescription', type: String, length: 32 }
