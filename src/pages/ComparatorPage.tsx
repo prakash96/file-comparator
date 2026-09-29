@@ -1,5 +1,5 @@
 import { useComparator } from '../hooks/useComparator';
-import { useTheme } from '../hooks/useTheme';
+import { AppHeader, type ThemeControl } from '../components/AppHeader';
 import { ComparisonConfig } from '../components/ComparisonConfig';
 import { FilePanel } from '../components/FilePanel';
 import { ErrorMessage } from '../components/Messages';
@@ -7,39 +7,25 @@ import { ProgressPanel } from '../components/ProgressPanel';
 import { ResultsView } from '../components/ResultsView';
 import { SchemaPanel } from '../components/SchemaPanel';
 
-export function ComparatorPage() {
+export function ComparatorPage({ theme }: { theme: ThemeControl }) {
   const c = useComparator();
-  const { theme, toggle } = useTheme();
   const { slots, schema, compare } = c;
   const anyFile = !!(slots.source.file || slots.target.file);
   const bothReady = slots.source.status === 'ready' && slots.target.status === 'ready';
 
   return (
     <div className="app">
-      <header className="app-header">
-        <div className="brand">
-          <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden>
-            <rect width="32" height="32" rx="6" fill="var(--accent)" />
-            <path d="M8 9h7v14H8zM17 9h7v14h-7z" fill="#fff" opacity=".92" />
-          </svg>
-          <div>
-            <h1>File Comparator</h1>
-            <div className="privacy" role="note">
-              <span aria-hidden>🔒</span> Files are processed locally in your browser and are not uploaded.
-            </div>
-          </div>
-        </div>
-        <div className="header-actions">
-          {anyFile && (
+      <AppHeader
+        page="compare"
+        theme={theme}
+        actions={
+          anyFile && (
             <button type="button" className="ghost" onClick={c.reset} title="Clear both files and all in-memory data">
               Reset
             </button>
-          )}
-          <button type="button" className="ghost" onClick={toggle} aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
-            {theme === 'dark' ? '☀ Light' : '☾ Dark'}
-          </button>
-        </div>
-      </header>
+          )
+        }
+      />
 
       <main>
         <div className="files">
