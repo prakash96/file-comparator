@@ -1,6 +1,8 @@
 import { useDeferredValue, useId, useMemo, useRef, useState } from 'react';
 import { AppHeader, type ThemeControl } from '../components/AppHeader';
 import { IssueList } from '../components/Messages';
+import { LayoutEditor, type LayoutHistory } from '../components/ffd/LayoutEditor';
+import { useHistory } from '../hooks/useHistory';
 import { applyFfd, type ApplyOptions, type FfdRecordMode } from '../ffd/applyFfd';
 import { FfdError, parseFfd, stringifyFfd } from '../ffd/ffdYaml';
 import { defaultInferOptions, inferFfd, type InferOptions, type InferResult } from '../ffd/inferFfd';
@@ -43,7 +45,16 @@ function CopyButton({ text, label = 'Copy' }: { text: string; label?: string }) 
 }
 
 /** A monospace text box that can also be filled from a local file. */
-function TextSource({ label, value, onChange, accept, placeholder, fileName, onFileName, rows = 12 }: {
+function TextSource({
+  label,
+  value,
+  onChange,
+  accept,
+  placeholder,
+  fileName,
+  onFileName,
+  rows = 12,
+}: {
   label: string;
   value: string;
   onChange: (text: string) => void;
@@ -94,25 +105,59 @@ function TextSource({ label, value, onChange, accept, placeholder, fileName, onF
 
 const numOrNull = (s: string): number | null => (s.trim() === '' ? null : Math.max(0, parseInt(s, 10) || 0));
 
-function GenerateTab({ sample, onApply }: { sample: string; onApply: (ffd: string) => void }) {
+type SchemaHistory = ReturnType<typeof useHistory<FfdSchema | null>>;
+
+/** A one-segment, one-field layout as wide as the longest sample line, for laying out fields by hand. */
+function blankLayout(sample: string): FfdSchema {
+  const width = Math.max(1, ...sample.split(/\r\n|\n|\r/).map((l) => l.length));
+  return { form: 'FIXEDWIDTH', structures: [], segments: [{ id: 'Record', name: 'Record', values: [{ name: 'Field1', type: 'String', length: width }] }] };
+}
+
+function BuildTab({ sample, layout, onApply }: { sample: string; layout: SchemaHistory; onApply: (ffd: string) => void }) {
   const [opts, setOpts] = useState<InferOptions>(defaultInferOptions);
   const [tagStart, setTagStart] = useState('');
   const [tagLength, setTagLength] = useState('');
   const [result, setResult] = useState<InferResult | null>(null);
-  const [yaml, setYaml] = useState('');
+  const [yamlDraft, setYamlDraft] = useState<string | null>(null);
+  const [yamlError, setYamlError] = useState<Error | null>(null);
+  const [openError, setOpenError] = useState<Error | null>(null);
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  const schema = layout.value;
+  const yaml = useMemo(() => (schema ? stringifyFfd(schema) : ''), [schema]);
 
   const generate = () => {
     const r = inferFfd(sample, { ...opts, tagStart: numOrNull(tagStart), tagLength: numOrNull(tagLength) });
     setResult(r);
-    setYaml(stringifyFfd(r.schema));
+    layout.reset(r.schema);
+    setYamlDraft(null);
   };
+
+  const editorLayout: LayoutHistory | null = schema
+    ? {
+        value: schema,
+        set: (next) => layout.set((cur) => (cur ? (typeof next === 'function' ? next(cur) : next) : cur)),
+        preview: layout.preview,
+        commit: layout.commit,
+        undo: layout.undo,
+        redo: layout.redo,
+        canUndo: layout.canUndo,
+        canRedo: layout.canRedo,
+      }
+    : null;
 
   return (
     <div className="tab-body ffd-tab">
       <div className="form-grid">
         <label>
           Tag start position
-          <input type="number" min={1} value={tagStart === '' ? '' : Number(tagStart) + 1} placeholder="auto" onChange={(e) => setTagStart(e.target.value === '' ? '' : String(Math.max(1, parseInt(e.target.value, 10) || 1) - 1))} />
+          <input
+            type="number"
+            min={1}
+            value={tagStart === '' ? '' : Number(tagStart) + 1}
+            placeholder="auto"
+            onChange={(e) => setTagStart(e.target.value === '' ? '' : String(Math.max(1, parseInt(e.target.value, 10) || 1) - 1))}
+          />
           <span className="hint">1-based column where the record-type code starts</span>
         </label>
         <label>
@@ -132,63 +177,127 @@ function GenerateTab({ sample, onApply }: { sample: string; onApply: (ffd: strin
         <button type="button" className="primary" disabled={!sample.trim()} onClick={generate}>
           Generate FFD
         </button>
+        <button type="button" onClick={() => fileInput.current?.click()} title="Edit an existing .ffd against the sample text">
+          Open existing FFD…
+        </button>
+        <button
+          type="button"
+          disabled={!sample.trim()}
+          onClick={() => (setResult(null), layout.reset(blankLayout(sample)), setYamlDraft(null))}
+          title="One field covering the whole record; add boundaries by hand"
+        >
+          Start blank layout
+        </button>
+        <input
+          ref={fileInput}
+          type="file"
+          accept=".ffd,.yaml,.yml,.txt"
+          hidden
+          onChange={async (e) => {
+            const f = e.target.files?.[0];
+            e.target.value = '';
+            if (!f) return;
+            try {
+              layout.reset(parseFfd(await f.text()));
+              setResult(null);
+              setOpenError(null);
+              setYamlDraft(null);
+            } catch (err) {
+              setOpenError(err as Error);
+            }
+          }}
+        />
         {!sample.trim() && <span className="muted">Paste or open sample text above first.</span>}
       </div>
+      {openError && <FfdErrorBox error={openError} title="That FFD cannot be opened" />}
 
       {result && (
-        <>
-          <div className="ffd-report">
-            <p>
-              <strong>{fmt(result.report.recordCount)}</strong> records ({result.report.mode}).{' '}
-              {result.report.tag ? (
-                <>
-                  Record type tag: columns {result.report.tag.start + 1}–{result.report.tag.start + result.report.tag.length}, because {result.report.tag.reason}.
-                </>
-              ) : (
-                'One record type (no tag).'
-              )}
-            </p>
-            <div className="table-scroll">
-              <table className="data">
-                <thead>
-                  <tr>
-                    <th>Segment</th>
-                    <th className="num">Records</th>
-                    <th className="num">Length</th>
-                    <th className="num">Fields</th>
+        <details className="ffd-report" open={!schema || undefined}>
+          <summary>
+            Generated from {fmt(result.report.recordCount)} records ({result.report.mode}).{' '}
+            {result.report.tag
+              ? `Record type tag: columns ${result.report.tag.start + 1}–${result.report.tag.start + result.report.tag.length}, because ${result.report.tag.reason}.`
+              : 'One record type (no tag).'}
+          </summary>
+          <div className="table-scroll">
+            <table className="data">
+              <thead>
+                <tr>
+                  <th>Segment</th>
+                  <th className="num">Records</th>
+                  <th className="num">Length</th>
+                  <th className="num">Fields</th>
+                </tr>
+              </thead>
+              <tbody>
+                {result.report.segments.map((s) => (
+                  <tr key={s.id}>
+                    <td>
+                      <code>{s.id}</code>
+                    </td>
+                    <td className="num">{fmt(s.records)}</td>
+                    <td className="num">{fmt(s.length)}</td>
+                    <td className="num">{fmt(s.fields)}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {result.report.segments.map((s) => (
-                    <tr key={s.id}>
-                      <td>
-                        <code>{s.id}</code>
-                      </td>
-                      <td className="num">{fmt(s.records)}</td>
-                      <td className="num">{fmt(s.length)}</td>
-                      <td className="num">{fmt(s.fields)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <IssueList issues={result.issues} />
-            <p className="muted">
-              Field boundaries come from blank columns in the sample, and fields are named Field1, Field2… Rename them and check the lengths below. A varied sample (several records per type) gives better boundaries.
-            </p>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <label className="field">
-            Generated FFD (editable)
-            <textarea className="code-input" rows={18} spellCheck={false} wrap="off" value={yaml} onChange={(e) => setYaml(e.target.value)} />
-          </label>
+          <IssueList issues={result.issues} />
+          <p className="muted">Field boundaries come from blank columns in the sample. Adjust them and name the fields in the layout editor below.</p>
+        </details>
+      )}
+
+      {editorLayout && (
+        <>
+          <h3 className="le-title">Layout editor</h3>
+          <LayoutEditor layout={editorLayout} sample={sample} />
+
+          <h3 className="le-title">FFD</h3>
+          {yamlDraft === null ? (
+            <pre className="json-output ffd-yaml">{yaml}</pre>
+          ) : (
+            <>
+              <textarea className="code-input" rows={18} spellCheck={false} wrap="off" value={yamlDraft} onChange={(e) => setYamlDraft(e.target.value)} aria-label="FFD YAML" />
+              {yamlError && <FfdErrorBox error={yamlError} title="The YAML was not applied" />}
+            </>
+          )}
           <div className="row-actions">
-            <button type="button" className="primary" onClick={() => onApply(yaml)}>
-              Apply this FFD to the sample →
-            </button>
-            <CopyButton text={yaml} />
-            <button type="button" onClick={() => downloadBlob(new Blob([yaml], { type: 'text/yaml' }), `${opts.structureId || 'schema'}.ffd`)}>
-              Download .ffd
-            </button>
+            {yamlDraft === null ? (
+              <>
+                <button type="button" className="primary" onClick={() => onApply(yaml)}>
+                  Apply this FFD to the sample →
+                </button>
+                <CopyButton text={yaml} />
+                <button type="button" onClick={() => downloadBlob(new Blob([yaml], { type: 'text/yaml' }), `${schema?.structures[0]?.id || schema?.segments[0]?.id || 'schema'}.ffd`)}>
+                  Download .ffd
+                </button>
+                <button type="button" className="ghost" onClick={() => (setYamlDraft(yaml), setYamlError(null))}>
+                  Edit YAML
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="primary"
+                  onClick={() => {
+                    try {
+                      layout.set(parseFfd(yamlDraft));
+                      setYamlDraft(null);
+                      setYamlError(null);
+                    } catch (err) {
+                      setYamlError(err as Error);
+                    }
+                  }}
+                >
+                  Apply YAML to the editor
+                </button>
+                <button type="button" className="ghost" onClick={() => (setYamlDraft(null), setYamlError(null))}>
+                  Cancel
+                </button>
+              </>
+            )}
           </div>
         </>
       )}
@@ -196,13 +305,38 @@ function GenerateTab({ sample, onApply }: { sample: string; onApply: (ffd: strin
   );
 }
 
-function ApplyTab({ sample, sampleName, ffd, setFfd, ffdName, setFfdName }: {
+function FfdErrorBox({ error, title }: { error: Error; title: string }) {
+  return (
+    <div className="msg msg-error" role="alert">
+      <div className="msg-title">{title}</div>
+      <div>{error.message}</div>
+      {error instanceof FfdError && error.problems.length > 0 && (
+        <ul>
+          {error.problems.slice(0, 30).map((p, i) => (
+            <li key={i}>{p}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function ApplyTab({
+  sample,
+  sampleName,
+  ffd,
+  setFfd,
+  ffdName,
+  setFfdName,
+  onEdit,
+}: {
   sample: string;
   sampleName: string;
   ffd: string;
   setFfd: (s: string) => void;
   ffdName: string;
   setFfdName: (s: string) => void;
+  onEdit: (schema: FfdSchema) => void;
 }) {
   const [mode, setMode] = useState<FfdRecordMode>('auto');
   const [trim, setTrim] = useState(true);
@@ -235,24 +369,28 @@ function ApplyTab({ sample, sampleName, ffd, setFfd, ffdName, setFfdName }: {
 
   return (
     <div className="tab-body ffd-tab">
-      <TextSource label="FFD schema" value={ffd} onChange={setFfd} fileName={ffdName} onFileName={setFfdName} accept=".ffd,.yaml,.yml,.txt" rows={14} placeholder={"form: FLATFILE\nstructures:\n- id: 'BatchReq'\n  data:\n  - { idRef: '0630', usage: O, count: '>1' }\nsegments:\n- id: '0630'\n  values:\n  - { name: 'MSGLength', type: String, length: 5, tagValue: ' 0630' }\n  - …"} />
-      {parsed && 'error' in parsed && (
-        <div className="msg msg-error" role="alert">
-          <div className="msg-title">The FFD cannot be used</div>
-          <div>{parsed.error.message}</div>
-          {parsed.error instanceof FfdError && parsed.error.problems.length > 0 && (
-            <ul>
-              {parsed.error.problems.slice(0, 30).map((p, i) => (
-                <li key={i}>{p}</li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
+      <TextSource
+        label="FFD schema"
+        value={ffd}
+        onChange={setFfd}
+        fileName={ffdName}
+        onFileName={setFfdName}
+        accept=".ffd,.yaml,.yml,.txt"
+        rows={14}
+        placeholder={
+          "form: FLATFILE\nstructures:\n- id: 'BatchReq'\n  data:\n  - { idRef: '0630', usage: O, count: '>1' }\nsegments:\n- id: '0630'\n  values:\n  - { name: 'MSGLength', type: String, length: 5, tagValue: ' 0630' }\n  - …"
+        }
+      />
+      {parsed && 'error' in parsed && <FfdErrorBox error={parsed.error} title="The FFD cannot be used" />}
       {schema && (
-        <p className="muted">
-          {schema.form} schema · {schema.segments.length} segment(s): {schema.segments.map((s) => s.id).join(', ')}
-        </p>
+        <div className="row-actions">
+          <span className="muted">
+            {schema.form} schema · {schema.segments.length} segment(s): {schema.segments.map((s) => s.id).join(', ')}
+          </span>
+          <button type="button" onClick={() => onEdit(schema)}>
+            Edit in layout editor
+          </button>
+        </div>
       )}
 
       <div className="form-grid">
@@ -318,6 +456,7 @@ export function FfdPage({ theme }: { theme: ThemeControl }) {
   const [sampleName, setSampleName] = useState('');
   const [ffd, setFfd] = useState('');
   const [ffdName, setFfdName] = useState('');
+  const layout = useHistory<FfdSchema | null>(null);
 
   return (
     <div className="app">
@@ -342,15 +481,16 @@ export function FfdPage({ theme }: { theme: ThemeControl }) {
         <section className="panel">
           <div className="tabs" role="tablist">
             <button type="button" role="tab" aria-selected={tab === 'generate'} className={`tab${tab === 'generate' ? ' is-active' : ''}`} onClick={() => setTab('generate')}>
-              Generate FFD from text
+              Build FFD (generate &amp; edit)
             </button>
             <button type="button" role="tab" aria-selected={tab === 'apply'} className={`tab${tab === 'apply' ? ' is-active' : ''}`} onClick={() => setTab('apply')}>
               Apply FFD → JSON
             </button>
           </div>
           <div hidden={tab !== 'generate'}>
-            <GenerateTab
+            <BuildTab
               sample={sample}
+              layout={layout}
               onApply={(yaml) => {
                 setFfd(yaml);
                 setFfdName('generated');
@@ -359,7 +499,18 @@ export function FfdPage({ theme }: { theme: ThemeControl }) {
             />
           </div>
           <div hidden={tab !== 'apply'}>
-            <ApplyTab sample={sample} sampleName={sampleName} ffd={ffd} setFfd={setFfd} ffdName={ffdName} setFfdName={setFfdName} />
+            <ApplyTab
+              sample={sample}
+              sampleName={sampleName}
+              ffd={ffd}
+              setFfd={setFfd}
+              ffdName={ffdName}
+              setFfdName={setFfdName}
+              onEdit={(schema) => {
+                layout.reset(schema);
+                setTab('generate');
+              }}
+            />
           </div>
         </section>
       </main>

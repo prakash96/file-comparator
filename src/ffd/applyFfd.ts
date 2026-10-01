@@ -24,6 +24,8 @@ export interface FfdRecord {
   /** 1-based line number (line mode) or record number (stream mode). */
   line: number;
   values: Record<string, FfdJson>;
+  /** The record's source text (not part of the JSON output). */
+  raw: string;
 }
 
 export interface ApplyResult {
@@ -31,6 +33,8 @@ export interface ApplyResult {
   output: FfdJson;
   mode: 'lines' | 'stream';
   segmentCounts: Record<string, number>;
+  /** Records that matched no segment (line mode), or 1 when stream reading stopped at one. */
+  unknownRecords: number;
   issues: Issue[];
 }
 
@@ -118,6 +122,7 @@ function readRecord(text: string, pos: number, cs: CompiledSegment, trim: boolea
 
 function splitRecords(text: string, mode: FfdRecordMode, segs: CompiledSegment[], opts: ApplyOptions, issues: IssueCollector) {
   const records: FfdRecord[] = [];
+  let unknown = 0;
   const resolved: 'lines' | 'stream' = mode === 'auto' ? (/\r|\n/.test(text.replace(/[\r\n]+$/, '')) ? 'lines' : 'stream') : mode;
 
   if (resolved === 'lines') {
@@ -127,6 +132,7 @@ function splitRecords(text: string, mode: FfdRecordMode, segs: CompiledSegment[]
       if (line.trim() === '') return;
       const cs = identify(line, 0, segs, line.length);
       if (!cs) {
+        unknown++;
         issues.error('FFD_UNKNOWN_RECORD', `Line ${i + 1} does not match any segment tag: "${line.slice(0, 20)}…"`, { line: i + 1 });
         return;
       }
@@ -135,7 +141,7 @@ function splitRecords(text: string, mode: FfdRecordMode, segs: CompiledSegment[]
       } else if (line.length > cs.length) {
         issues.warn('FFD_LONG_RECORD', `Line ${i + 1} (${cs.seg.id}) is ${line.length} characters; the segment defines ${cs.length}. The extra ${line.length - cs.length} character(s) were ignored.`, { line: i + 1 });
       }
-      records.push({ segment: cs.seg.id, line: i + 1, values: readRecord(line, 0, cs, opts.trim) });
+      records.push({ segment: cs.seg.id, line: i + 1, values: readRecord(line, 0, cs, opts.trim), raw: line });
     });
   } else {
     let pos = 0;
@@ -144,17 +150,18 @@ function splitRecords(text: string, mode: FfdRecordMode, segs: CompiledSegment[]
       if (pos >= text.length) break;
       const cs = identify(text, pos, segs);
       if (!cs) {
+        unknown++;
         issues.error('FFD_UNKNOWN_RECORD', `Record ${records.length + 1} at character ${pos + 1} does not match any segment tag: "${text.slice(pos, pos + 20)}…". Reading stopped here.`, { record: records.length + 1 });
         break;
       }
       if (pos + cs.length > text.length) {
         issues.warn('FFD_SHORT_RECORD', `The last record (${cs.seg.id}) is ${text.length - pos} characters; the segment defines ${cs.length}. Missing fields are empty.`, { record: records.length + 1 });
       }
-      records.push({ segment: cs.seg.id, line: records.length + 1, values: readRecord(text, pos, cs, opts.trim) });
+      records.push({ segment: cs.seg.id, line: records.length + 1, values: readRecord(text, pos, cs, opts.trim), raw: text.slice(pos, pos + cs.length) });
       pos += cs.length;
     }
   }
-  return { records, mode: resolved };
+  return { records, mode: resolved, unknown };
 }
 
 /** Segment ids that can start this item (a group can start with any leading optional item or its first mandatory one). */
@@ -203,7 +210,7 @@ export function applyFfd(text: string, schema: FfdSchema, options: ApplyOptions)
   const issues = new IssueCollector();
   const segs = compile(schema);
   const input = text.replace(/^﻿/, '');
-  const { records, mode } = splitRecords(input, options.recordMode, segs, options, issues);
+  const { records, mode, unknown } = splitRecords(input, options.recordMode, segs, options, issues);
 
   const segmentCounts: Record<string, number> = {};
   for (const r of records) segmentCounts[r.segment] = (segmentCounts[r.segment] ?? 0) + 1;
@@ -227,5 +234,5 @@ export function applyFfd(text: string, schema: FfdSchema, options: ApplyOptions)
   }
   if (records.length === 0) issues.warn('FFD_NO_RECORDS', 'No records were read from the text.');
 
-  return { records, output, mode, segmentCounts, issues: issues.toArray() };
+  return { records, output, mode, segmentCounts, unknownRecords: unknown, issues: issues.toArray() };
 }
